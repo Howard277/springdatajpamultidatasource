@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+    	<!-- 日志文件打印位置为，程序启动路径下的log文件夹中 -->
+        <Property name="baseDir">${sys:user.dir}/log</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="STDOUT">
+            <PatternLayout>
+                <pattern>%d %highlight{%p} %style{%c{1.} [%t] %m}{bold,green}%n</pattern>
+            </PatternLayout>
+        </Console>
+        <!-- 非立即输出；追加到文件；日志输出缓存尺寸为10K -->
+        <RollingRandomAccessFile
+                name="RollingRandomAccessFile"
+                fileName="${baseDir}/springbootdemo-version007.log" filePattern="${baseDir}/$${date:yyyy-MM}/springbootdemo-version007-%d{yyyy-MM-dd}-%i.log"
+                immediateFlush="false" append="true" bufferSize="10240"
+        >
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="512 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${baseDir}" maxDepth="2">
+                    <IfFileName glob="*/springbootdemo-version007-*.log">
+                        <IfLastModified age="1d">
+                            <IfAny>
+                                <IfAccumulatedFileSize exceeds="2 GB"/>
+                            </IfAny>
+                        </IfLastModified>
+                    </IfFileName>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Root level="${sys:app.logLevel:-DEBUG}" includeLocation="false">
+            <AppenderRef ref="RollingRandomAccessFile"/>
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+    </Loggers>
+</Configuration>

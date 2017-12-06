@@ -1,0 +1,33 @@
+server.port: 8000
+
+logging.config: classpath:log4j2.xml
+logging.level.root: info
+
+#主数据源配置
+primary.datasource:
+  type: com.zaxxer.hikari.HikariDataSource
+  jdbcUrl: jdbc:mysql://localhost:3306/test1
+  username: root
+  password: root
+  driverClassName: com.mysql.jdbc.Driver
+  #配置数据库连接池HikariCP
+  maxPoolSize: 50
+  minIdle: 20
+  
+#从数据源配置
+secondary.datasource:
+  type: com.zaxxer.hikari.HikariDataSource
+  jdbcUrl: jdbc:mysql://localhost:3306/test2
+  username: root
+  password: root
+  driverClassName: com.mysql.jdbc.Driver
+  #配置数据库连接池HikariCP
+  maxPoolSize: 50
+  minIdle: 20
+
+spring.jpa:
+  database: mysql
+  show-sql: true
+  hibernate.ddl-auto: update
+  hibernate.naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
